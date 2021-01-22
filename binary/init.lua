@@ -30,7 +30,7 @@ function binary.log2 (n)
 		local x = (1 << i)
 		if n >= 1 << x then
 			r = r | x
-			n = n >> x
+			n = n >> i
 		end
 	end
 	return r

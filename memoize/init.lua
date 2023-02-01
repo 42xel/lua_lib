@@ -98,6 +98,10 @@ end
 
 
 function memoizedum (fun, init)
+	-- a dumb memoization, which only memorize direct calls.
+	--You might get away with myFunc = memoizedum(myFunc, init) and have memoization working properly,
+	--in which case behaviours may or may not depend whether self calls are local, global, field, ...
+	--One thing is certain, you have to pick one and be consistent, including with reassignation. 
 	init = init or {}
 	local mem = setmetatable({}, meta)
 	for k, v in pairs(init) do
@@ -115,6 +119,9 @@ end
 
 
 function memoizerec (fun, init)
+	--a proper memoization functor.
+	--only handles proper recursive calls, that is, self referencing by upvalues, aka local variables.
+	--the coe to support self reference by global exists in comment.
 	init = init or {}
 	local mem = setmetatable({}, meta)
 	for k, v in pairs(init) do
@@ -168,6 +175,7 @@ end
 
 
 function memoizestack (fun, ...)
+	--a proper memoization functor which also explicit the call stack so as to not be limited
 	local init, default = ..., nil
 	if select ("#", ...) == 0 then
 		error ("init must be provided (at least as a nil value)", 2)
